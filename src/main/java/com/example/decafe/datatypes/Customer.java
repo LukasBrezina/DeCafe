@@ -1,22 +1,22 @@
-package com.example.decafe;
+package com.example.decafe.datatypes;
 
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 import java.io.*;
 import java.util.*;
 
+import static com.example.decafe.utility.ImageService.createImage;
+
 
 public class Customer {
-    private String order; //The order of the customer
-    private ImageView customer; //picture of the customer
-    private ImageView orderLabel; //label that displays order
-    private int chair; //number of chair the customer is sitting
-    private Timer sixtySecondsTimer; //timer for the 60 seconds waiting time
+//    private String order; //The order of the customer
+//    private ImageView customer; //picture of the customer
+//    private ImageView orderLabel; //label that displays order
+//    private int chair; //number of chair the customer is sitting
+    private Order order;
+    public ImageView customerImage; //picture of the customer
+    private Timer sixtySecondsTimer = new Timer(); //timer for the 60 seconds waiting time
     private static Timer controllerTimer; //timer for leaving, spawning
     private ImageView smiley; //picture of smiley for the mood of the customer
     private ImageView coinImage; //picture of the money the customer is leaving behind
@@ -38,17 +38,14 @@ public class Customer {
     public static ImageView[] coinImages; //image for coins
 
     // Constructors
-    Customer(){}
-    Customer(ImageView image, ImageView label, int chair, ImageView smiley, ImageView coinImage) {
-        this.customer = image;
-        this.orderLabel = label;
-        this.alreadyOrdered = false;
-        this.chair = chair;
+    public Customer(){}
+    Customer(Order order, ImageView customerImage, boolean alreadyOrdered, ImageView smiley, ImageView coinImage) {
+        this.order = order;
+        this.customerImage = customerImage;
+        this.alreadyOrdered = alreadyOrdered;
         this.smiley = smiley;
         this.coinImage = coinImage;
-        this.sixtySecondsTimer = new Timer();
     }
-
     // Getter
     public static Timer getControllerTimer() {
         return controllerTimer;
@@ -78,41 +75,29 @@ public class Customer {
         return this.alreadyOrdered;
     }
 
-    public String getOrder() { //returns the order of the customer
+    public Order getOrder() { //returns the order of the customer
         return order;
     }
 
-    public int getChair() { //get the number of the chair the customer is sitting
-        return chair;
-    }
-
-    public ImageView getImage() { //returns the image of the customer
-        return this.customer;
-    }
-
-    public ImageView getLabel() { //returns the label of the customer
-        return this.orderLabel;
-    }
-
-    public String getRandomOrder() { //returns random order
-
-        Random random = new Random();
-        int number = random.nextInt(2);
-
-        switch (number) {
-            case 0 -> order = "cake";
-            case 1 -> order = "coffee";
-        }
-
-        return order;
-    }
+//    public String getRandomOrder() { //returns random order
+//
+//        Random random = new Random();
+//        int number = random.nextInt(2);
+//
+//        switch (number) {
+//            case 0 -> order = "cake";
+//            case 1 -> order = "coffee";
+//        }
+//
+//        return order;
+//    }
 
     public ImageView getCoinImage() { //returns the image of the coin
         return coinImage;
     }
 
     // Setter
-    public void setOrder(String order) { //sets the order of the customer
+    public void setOrder(Order order) { //sets the order of the customer
         this.order = order;
     }
 
@@ -121,13 +106,13 @@ public class Customer {
     }
 
     // Method used to create an Image Object
-    public Image createImage(String filename) throws FileNotFoundException {
-        File f = new File(""); // Get filepath of project
-        // Get path to certain Image
-        String filePath = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + filename;
-        InputStream stream = new FileInputStream(filePath); // Convert path into stream
-        return new Image(stream); // Convert stream to Image and return it
-    }
+//    public Image createImage(String filename) throws FileNotFoundException {
+//        File f = new File(""); // Get filepath of project
+//        // Get path to certain Image
+//        String filePath = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + filename;
+//        InputStream stream = new FileInputStream(filePath); // Convert path into stream
+//        return new Image(stream); // Convert stream to Image and return it
+//    }
 
     //Returns the appropriate image for the customer
     public static ImageView getImage(ImageView customer, ImageView[] searchArray ){
@@ -198,12 +183,13 @@ public class Customer {
             ImageView customerImage = getRandomPic(); //get random picture from Array
             customerImage.setVisible(true); //make this picture visible
 
-            ImageView order = getLabel(customerImage); //get the label for the customer
+            ImageView customerLabel = getLabel(customerImage); //get the label for the customer
             ImageView smiley = getImage(customerImage, smileyImages); //gets the smiley picture for the customer
             ImageView coin = getImage(customerImage, coinImages); //gets the coin picture for the customer
 
-
-            Customer customer = new Customer(customerImage, order, freeSeatChosen, smiley, coin); //make new customer object
+            Order order = new Order(customerLabel, freeSeatChosen); //make new order object
+            Customer customer = new Customer(order, customerImage, false, smiley, coin); //make new customer object
+//            Customer customer = new Customer(customerLabel, customerImage, freeSeatChosen, smiley, coin); //make new customer object
             customersInCoffeeShop.add(customer); //to check if not more than 3 customers are in the store
             allCustomers.add(customer); //to stop all timers that are still alive even after customer has left
             File f = new File("");
@@ -231,14 +217,14 @@ public class Customer {
 
     //Methode for the timer when customer leaves
     public void startTimerLeave (Customer customer){
-        this.orderLabel.setVisible(false);
+        this.order.getOrderLabelImage().setVisible(false);
         this.smiley.setVisible(false);
         controllerTimer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
                         try {
-                            leave(customer.getImage());
+                            leave(customer.getImage(customer.customerImage, customerImages));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -300,33 +286,47 @@ public class Customer {
     }
 
     //Methode to display order
-    public void displayOrder(ImageView orderlabel) throws FileNotFoundException {
-        this.order = getRandomOrder();
-        setOrder(order);
-        if(order.equals("cake")) {
-            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCakeTopLeft.png"));
-            } else if(chair == 2 || chair == 3){
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCakeTopRight.png"));
-            } else if(chair == 5) {
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCakeBottomRight.png"));
-            }
-        } else if(order.equals("coffee")){
-            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCoffeeTopLeft.png"));
-            } else if(chair == 2 || chair == 3){
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCoffeeTopRight.png"));
-            } else if(chair == 5){
-                orderlabel.setVisible(true);
-                orderlabel.setImage(createImage("bubbleCoffeeBottomRight.png"));
+    public void displayOrder(Order newOrder) throws FileNotFoundException {
+//        setOrder(order);
+//        if(order.equals("cake")) {
+//            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCakeTopLeft.png"));
+//            } else if(chair == 2 || chair == 3){
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCakeTopRight.png"));
+//            } else if(chair == 5) {
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCakeBottomRight.png"));
+//            }
+//        } else if(order.equals("coffee")){
+//            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCoffeeTopLeft.png"));
+//            } else if(chair == 2 || chair == 3){
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCoffeeTopRight.png"));
+//            } else if(chair == 5){
+//                orderlabel.setVisible(true);
+//                orderlabel.setImage(createImage("bubbleCoffeeBottomRight.png"));
+//            }
+//        }
+//        this.alreadyOrdered = true;
+        setOrder(newOrder);
+        if (order != null && (order.equals("cake") || order.equals("coffee"))) {
+            order.getOrderLabelImage().setVisible(true);
+            int chair = order.getChair();
+            String imageFile = switch (chair) {
+                case 0, 1, 4, 6 -> order.equals("cake") ? "bubbleCakeTopLeft.png" : "bubbleCoffeeTopLeft.png";
+                case 2, 3       -> order.equals("cake") ? "bubbleCakeTopRight.png" : "bubbleCoffeeTopRight.png";
+                case 5          -> order.equals("cake") ? "bubbleCakeBottomRight.png" : "bubbleCoffeeBottomRight.png";
+                default         -> "";
+            };
+            if (!imageFile.isEmpty()) {
+                order.getOrderLabelImage().setImage(createImage(imageFile));
             }
         }
-        this.alreadyOrdered = true;
+
     }
 
 
@@ -349,14 +349,14 @@ public class Customer {
     public static void noMoneySpent(Customer customer) throws FileNotFoundException {
         customer.coinImage.setVisible(false);
         customer.coinImage.setDisable(true);
-        freeChairs.add(customer.getChair());
+        freeChairs.add(customer.order.getChair());
         customer.startTimerSpawn(5, controllerTimer);
     }
 
     //Methode for when the customer leaves
     public void leave (ImageView customerImage) throws FileNotFoundException {
         customerImage.setVisible(false);
-        customersInCoffeeShop.removeIf(customer -> customer.getImage().equals(customerImage)); //remove customer from customerList
+        customersInCoffeeShop.removeIf(customer -> customer.customerImage.equals(customerImage)); //remove customer from customerList
         this.coinImage.setVisible(true);
         this.coinImage.setDisable(false);
         if (this.leftUnhappy){ //when customer leaves after 60 seconds or received wrong order
@@ -365,7 +365,7 @@ public class Customer {
             AudioClip wrongOrder = new AudioClip(new File(musicFile).toURI().toString());
             //MediaPlayer collectMoney = new MediaPlayer(sound);
             wrongOrder.play();
-            this.coinImage.setImage(this.createImage("coin.png")); // set coin Image to empty plate
+            this.coinImage.setImage(createImage("coin.png")); // set coin Image to empty plate
             this.coinImage.setOnMouseClicked(event1 -> { // set click event to this
                 try {
                     noMoneySpent(this);

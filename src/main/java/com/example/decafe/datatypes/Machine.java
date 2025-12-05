@@ -1,4 +1,4 @@
-package com.example.decafe;
+package com.example.decafe.datatypes;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -11,14 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
+import static com.example.decafe.utility.ImageService.createImage;
 
 // Class used to control all the methods needed to operate a Machine
 public class Machine {
@@ -47,13 +44,13 @@ public class Machine {
     public void setProduced(Boolean produced){ this.produced = produced; }
 
     // Method used to create an Image Object
-    public Image createImage(String filename) throws FileNotFoundException {
-        File f = new File(""); // Get filepath of project
-        // Get path to certain Image
-        String filePath = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + filename;
-        InputStream stream = new FileInputStream(filePath); // Convert path into stream
-        return new Image(stream); // Convert stream to Image and return it
-    }
+//    public Image createImage(String filename) throws FileNotFoundException {
+//        File f = new File(""); // Get filepath of project
+//        // Get path to certain Image
+//        String filePath = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + filename;
+//        InputStream stream = new FileInputStream(filePath); // Convert path into stream
+//        return new Image(stream); // Convert stream to Image and return it
+//    }
 
     // Method used to animate the progressbar above the Machine
     public void doProgressBarAnimation(Timer productionTimer, ImageView machineImageView, ProgressBar machineProgressBar, Image imageProductProduced){
