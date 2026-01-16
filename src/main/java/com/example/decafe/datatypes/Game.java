@@ -1,35 +1,32 @@
 package com.example.decafe.datatypes;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.FileNotFoundException;
 
-import static com.example.decafe.utility.ImageService.createImage;
-
 //Class that is used mainly to control certain assets of the Game like Machines, Upgrades and the Coin Score
 public class Game {
-    private final Machine coffeeMachine; // A Machine Object used to make Coffee
-    private final Machine cakeMachine; // A Machine Object used to make Cake
-    private final Upgrade coffeeUpgrade; // An Upgrade Object used to upgrade the Coffee Machine
-    private final Upgrade cakeUpgrade; // An Upgrade Object used to upgrade the Cake Machine
-    private final Upgrade playerUpgrade; // An Upgrade Object used to make the Player faster
-    private int coinsEarned; // The amount of Coins earned/used in the Game - 0 at the beginning
-    private final String filenameImageThreeCoins; // Image of small amount of money earned
-    private final String filenameImageFourCoins; // Image of normal amount of money earned
-    private final String filenameImageDollar; // Images of huge amount of money earned
+    private final Machine coffeeMachine;
+    private final Machine cakeMachine;
+    private final Upgrade coffeeMachineUpgrade;
+    private final Upgrade cakeMachineUpgrade;
+    private final Upgrade playerSpeedUpgrade;
+    private int coinBudget;
+    private final String imageThreeCoinsEarned;
+    private final String imageFourCoinsEarned;
+    private final String imageDollarEarned;
 
     // Constructor
     public Game(ImageView upgradeCoffee, ImageView upgradeCake, ImageView upgradePlayer){
         this.coffeeMachine = new Machine(5, "coffeeMachineWithCoffee.png", "coffeeMachine.png", "coffee");
         this.cakeMachine = new Machine(5, "kitchenAidUsed.png", "kitchenAid.png", "cake");
-        this.coffeeUpgrade = new Upgrade(20, false, "coffeeUpgrade.png", "coffeeUsed.png",  upgradeCoffee);
-        this.cakeUpgrade = new Upgrade(20, false, "cakeUpgrade.png", "cakeUsed.png", upgradeCake);
-        this.playerUpgrade = new Upgrade(40, false, "upgradeSkates.png", "upgradeSkatesUsed.png",  upgradePlayer);
-        this.coinsEarned = 0;
-        this.filenameImageDollar = "5coins.png";
-        this.filenameImageFourCoins = "4coins.png";
-        this.filenameImageThreeCoins = "3coins.png";
+        this.coffeeMachineUpgrade = new Upgrade(20, false, "coffeeUpgrade.png", "coffeeUsed.png",  upgradeCoffee);
+        this.cakeMachineUpgrade = new Upgrade(20, false, "cakeUpgrade.png", "cakeUsed.png", upgradeCake);
+        this.playerSpeedUpgrade = new Upgrade(40, false, "upgradeSkates.png", "upgradeSkatesUsed.png",  upgradePlayer);
+        this.coinBudget = 0;
+        this.imageDollarEarned = "5coins.png";
+        this.imageFourCoinsEarned = "4coins.png";
+        this.imageThreeCoinsEarned = "3coins.png";
     }
 
     // Getter
@@ -42,37 +39,37 @@ public class Game {
     }
 
     public Upgrade getCakeUpgrade() {
-        return cakeUpgrade;
+        return cakeMachineUpgrade;
     }
 
     public Upgrade getCoffeeUpgrade() {
-        return coffeeUpgrade;
+        return coffeeMachineUpgrade;
     }
 
     public Upgrade getPlayerUpgrade() {
-        return playerUpgrade;
+        return playerSpeedUpgrade;
     }
 
     public String getFilenameImageThreeCoins() {
-        return filenameImageThreeCoins;
+        return imageThreeCoinsEarned;
     }
 
     public String getFilenameImageFourCoins() {
-        return filenameImageFourCoins;
+        return imageFourCoinsEarned;
     }
 
     public String getFilenameImageDollar() {
-        return filenameImageDollar;
+        return imageDollarEarned;
     }
 
-    public int getCoinsEarned() { return coinsEarned; }
+    public int getCoinsEarned() { return coinBudget; }
 
     public void setCoinsEarned(int coinsEarned) {
-        this.coinsEarned = coinsEarned;
+        this.coinBudget = coinsEarned;
     }
 
     public void addToCoinsEarned (int coins) {
-        this.coinsEarned += coins;
+        this.coinBudget += coins;
     }
 
 //    public void checkUpgradePossible(Upgrade upgrade) throws FileNotFoundException {
@@ -104,11 +101,11 @@ public class Game {
 
     public void addCoinsAfterCustomer(Customer customer){
         if (customer.isGreen()){
-            this.coinsEarned += 7;
+            this.coinBudget += 7;
         } else if (customer.isYellow()){
-            this.coinsEarned += 5;
+            this.coinBudget += 5;
         }else if (customer.isRed()){
-            this.coinsEarned += 3;
+            this.coinBudget += 3;
         }
     }
 }

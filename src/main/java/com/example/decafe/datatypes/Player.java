@@ -2,49 +2,49 @@ package com.example.decafe.datatypes;
 
 // Class to handle Methods used to change the Image and movement speed of waiter
 public class Player {
-    private final String filenameImageWithoutProduct; // Image of the waiter without anything in his hands
-    private final String filenameImageWithCoffee; // Image of the waiter with coffee in his hands
-    private final String filenameImageWithCake; // Image of the waiter with cake in his hands
-    private String productInHand; // The type of product the waiter holds in his hands (Coffee or Cake)
-    private int movementSpeed; // the movement speed at which the waiter moves
+    private final String imageWaiterWithoutProductInHands;
+    private final String imageWaiterWithCoffeeInHands;
+    private final String imageWaiterWithCakeInHands;
+    private String productInWaiterHands;
+    private int movementSpeedOfWaiter;
 
     // Constructor
     public Player(String filenameImageWithoutProduct, String filenameImageWithCake, String filenameImageWithCoffee, int movement) {
-        this.filenameImageWithoutProduct = filenameImageWithoutProduct;
-        this.filenameImageWithCake =  filenameImageWithCake;
-        this.filenameImageWithCoffee = filenameImageWithCoffee;
-        this.productInHand = "none";
-        this.movementSpeed = movement;
+        this.imageWaiterWithoutProductInHands = filenameImageWithoutProduct;
+        this.imageWaiterWithCakeInHands =  filenameImageWithCake;
+        this.imageWaiterWithCoffeeInHands = filenameImageWithCoffee;
+        this.productInWaiterHands = "none";
+        this.movementSpeedOfWaiter = movement;
     }
 
     //Getter
     public String getProductInHand() {
-        return productInHand;
+        return productInWaiterHands;
     }
 
     public String getFilenameImageWithoutProduct() {
-        return filenameImageWithoutProduct;
+        return imageWaiterWithoutProductInHands;
     }
 
     public String getFilenameImageWithCake() {
-        return filenameImageWithCake;
+        return imageWaiterWithCakeInHands;
     }
 
     public String getFilenameImageWithCoffee() {
-        return filenameImageWithCoffee;
+        return imageWaiterWithCoffeeInHands;
     }
 
     public int getMovement() {
-        return movementSpeed;
+        return movementSpeedOfWaiter;
     }
 
     //Setter
     public void setProductInHand(String productInHand) {
-        this.productInHand = productInHand;
+        this.productInWaiterHands = productInHand;
     }
 
     public void setMovement(int movement) {
-        this.movementSpeed = movement;
+        this.movementSpeedOfWaiter = movement;
     }
 }
 

@@ -15,36 +15,36 @@ public class Customer {
 //    private ImageView orderLabel; //label that displays order
 //    private int chair; //number of chair the customer is sitting
     private Order order;
-    public ImageView customerImage; //picture of the customer
-    private Timer sixtySecondsTimer = new Timer(); //timer for the 60 seconds waiting time
+    public ImageView customerImage;
+    private Timer sixtySecondsWaitingTimer = new Timer();
     private static Timer controllerTimer; //timer for leaving, spawning
-    private ImageView smiley; //picture of smiley for the mood of the customer
-    private ImageView coinImage; //picture of the money the customer is leaving behind
+    private ImageView moodCustomerSmiley;
+    private ImageView customerMoneyImage; 
 
-    private boolean alreadyOrdered; //boolean to see if the customer has already ordered
-    private boolean green; //boolean for smiley
-    private boolean yellow; //boolean for smiley
-    private boolean red; //boolean for smiley
+    private boolean alreadyOrderedBool;
+    private boolean greenCustomerSmileyBool;
+    private boolean yellowCustomerSmileyBool;
+    private boolean redCustomerSmileyBool;
 
-    private boolean leftUnhappy = true; //boolean to see if customer has left unhappy (received wrong order or left after 60 secs)
+    private boolean leftUnhappyBool = true;
 
-    public static List<Customer> customersInCoffeeShop = new ArrayList<>(); //list with all customers that are in the café
-    public static List<Customer> allCustomers = new ArrayList<>(); //list with all customers ever created
-    public static List<Integer> freeChairs; //integer list with all chair numbers
-    public static ImageView[] customerImages; //array with all customer pictures
+    public static List<Customer> customersInCoffeeShopList = new ArrayList<>();
+    public static List<Customer> allCustomersList = new ArrayList<>();
+    public static List<Integer> freeChairsNumbersList;
+    public static ImageView[] customerImages;
     private static int freeSeatChosen = 0;
-    public static ImageView[] smileyImages; //image for smiley
-    public static ImageView[] orderLabels; //label for order
-    public static ImageView[] coinImages; //image for coins
+    public static ImageView[] smileyImages;
+    public static ImageView[] orderLabels;
+    public static ImageView[] coinImages;
 
     // Constructors
     public Customer(){}
     Customer(Order order, ImageView customerImage, boolean alreadyOrdered, ImageView smiley, ImageView coinImage) {
         this.order = order;
         this.customerImage = customerImage;
-        this.alreadyOrdered = alreadyOrdered;
-        this.smiley = smiley;
-        this.coinImage = coinImage;
+        this.alreadyOrderedBool = alreadyOrdered;
+        this.moodCustomerSmiley = smiley;
+        this.customerMoneyImage = coinImage;
     }
     // Getter
     public static Timer getControllerTimer() {
@@ -52,27 +52,27 @@ public class Customer {
     }
 
     public Timer getSixtySecondsTimer() {
-        return sixtySecondsTimer;
+        return sixtySecondsWaitingTimer;
     }
 
     public static void addFreeSeat(int chairLeft) { //add chair number to the list when customer has left
-        Customer.freeChairs.add(chairLeft);
+        Customer.freeChairsNumbersList.add(chairLeft);
     }
 
     public boolean isGreen() { //to see if the color of the smiley
-        return green;
+        return greenCustomerSmileyBool;
     }
 
     public boolean isRed() { //to see if the color of the smiley
-        return red;
+        return redCustomerSmileyBool;
     }
 
     public boolean isYellow() { //to see if the color of the smiley
-        return yellow;
+        return yellowCustomerSmileyBool;
     }
 
     public boolean isAlreadyOrdered() { //return if the customer has already ordered or not
-        return this.alreadyOrdered;
+        return this.alreadyOrderedBool;
     }
 
     public Order getOrder() { //returns the order of the customer
@@ -93,7 +93,7 @@ public class Customer {
 //    }
 
     public ImageView getCoinImage() { //returns the image of the coin
-        return coinImage;
+        return customerMoneyImage;
     }
 
     // Setter
@@ -169,21 +169,21 @@ public class Customer {
     //Returns random customer picture
     public static ImageView getRandomPic(){
         Random random = new Random();
-        int index = freeChairs.get(random.nextInt(freeChairs.size()));
+        int index = freeChairsNumbersList.get(random.nextInt(freeChairsNumbersList.size()));
         freeSeatChosen = index;
 
-        if (!freeChairs.contains(index)) { //when the customer is already visible make new random number
+        if (!freeChairsNumbersList.contains(index)) { //when the customer is already visible make new random number
             getRandomPic();
         }
 
-        freeChairs.remove(Integer.valueOf(index)); //remove the number from the number list of chairs so there are no duplicates
+        freeChairsNumbersList.remove(Integer.valueOf(index)); //remove the number from the number list of chairs so there are no duplicates
 
         return customerImages[index];
     }
 
     //Methode to spawn customers
     public static void spawnCustomers(){
-        if (customersInCoffeeShop.size() < 3 && freeChairs.size() != 0) { //spawn a new customer this when under 3 customers are in the café
+        if (customersInCoffeeShopList.size() < 3 && freeChairsNumbersList.size() != 0) { //spawn a new customer this when under 3 customers are in the café
             ImageView customerImage = getRandomPic(); //get random picture from Array
             customerImage.setVisible(true); //make this picture visible
 
@@ -194,8 +194,8 @@ public class Customer {
             Order order = new Order(customerLabel, freeSeatChosen); //make new order object
             Customer customer = new Customer(order, customerImage, false, smiley, coin); //make new customer object
 //            Customer customer = new Customer(customerLabel, customerImage, freeSeatChosen, smiley, coin); //make new customer object
-            customersInCoffeeShop.add(customer); //to check if not more than 3 customers are in the store
-            allCustomers.add(customer); //to stop all timers that are still alive even after customer has left
+            customersInCoffeeShopList.add(customer); //to check if not more than 3 customers are in the store
+            allCustomersList.add(customer); //to stop all timers that are still alive even after customer has left
             File f = new File("");
             String musicFile = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + "doorBell.mp3";
             AudioClip doorBell = new AudioClip(new File(musicFile).toURI().toString());
@@ -220,7 +220,7 @@ public class Customer {
 
     public void startTimerLeave (Customer customer){
         this.order.getOrderLabelImage().setVisible(false);
-        this.smiley.setVisible(false);
+        this.moodCustomerSmiley.setVisible(false);
         controllerTimer.schedule(
                 new TimerTask() {
                     @Override
@@ -235,7 +235,7 @@ public class Customer {
                 },
                 1000
         );
-        this.sixtySecondsTimer.cancel(); //cancel the 60 seconds when customer left
+        this.sixtySecondsWaitingTimer.cancel(); //cancel the 60 seconds when customer left
     }
 
     public void customerWaitingTimeBeforeLeave()  {
@@ -246,35 +246,35 @@ public class Customer {
             public void run() {
                 seconds --;
                 if (seconds == 59){ //set green smiley when the customer has just spawned
-                    smiley.setVisible(true);
+                    moodCustomerSmiley.setVisible(true);
                     try {
-                        smiley.setImage(createImage("smileygreen.png"));
+                        moodCustomerSmiley.setImage(createImage("smileygreen.png"));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    green = true;
-                    yellow = false;
-                    red = false;
+                    greenCustomerSmileyBool = true;
+                    yellowCustomerSmileyBool = false;
+                    redCustomerSmileyBool = false;
                 }else if (seconds == 30){ //set yellow smiley when the customer has just spawned
-                    smiley.setVisible(true);
+                    moodCustomerSmiley.setVisible(true);
                     try {
-                        smiley.setImage(createImage("smileyyellow.png"));
+                        moodCustomerSmiley.setImage(createImage("smileyyellow.png"));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    green = false;
-                    yellow = true;
-                    red = false;
+                    greenCustomerSmileyBool = false;
+                    yellowCustomerSmileyBool = true;
+                    redCustomerSmileyBool = false;
                 }else if (seconds == 15){ //set red smiley when the customer has just spawned
-                    smiley.setVisible(true);
+                    moodCustomerSmiley.setVisible(true);
                     try {
-                        smiley.setImage(createImage("smileyred.png"));
+                        moodCustomerSmiley.setImage(createImage("smileyred.png"));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    green = false;
-                    yellow = false;
-                    red = true;
+                    greenCustomerSmileyBool = false;
+                    yellowCustomerSmileyBool = false;
+                    redCustomerSmileyBool = true;
                 }
                 else if (seconds == 0){ //when the timer has finished - customer leaves
                     startTimerLeave(customer);
@@ -282,8 +282,7 @@ public class Customer {
             }
         };
 
-        this.sixtySecondsTimer.schedule(timerTask, 0, 1000);//it should call this methode every second
-
+        this.sixtySecondsWaitingTimer.schedule(timerTask, 0, 1000);//it should call this methode every second
     }
 
     public void displayOrderOfCustomer(Order newOrder) throws FileNotFoundException {
@@ -334,17 +333,17 @@ public class Customer {
     //Methode for when the customer leaves
     public void customerLeaves(ImageView customerImage) throws FileNotFoundException {
         customerImage.setVisible(false);
-        customersInCoffeeShop.removeIf(customer -> customer.customerImage.equals(customerImage)); //remove customer from customerList
-        this.coinImage.setVisible(true);
-        this.coinImage.setDisable(false);
-        if (this.leftUnhappy){ //when customer leaves after 60 seconds or received wrong order
+        customersInCoffeeShopList.removeIf(customer -> customer.customerImage.equals(customerImage)); //remove customer from customerList
+        this.customerMoneyImage.setVisible(true);
+        this.customerMoneyImage.setDisable(false);
+        if (this.leftUnhappyBool){ //when customer leaves after 60 seconds or received wrong order
             File f = new File("");
             String musicFile = f.getAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "com" + File.separator + "example" + File.separator + "decafe" + File.separator + "wrongChoice.mp3";
             AudioClip wrongOrder = new AudioClip(new File(musicFile).toURI().toString());
             //MediaPlayer collectMoney = new MediaPlayer(sound);
             wrongOrder.play();
-            this.coinImage.setImage(createImage("coin.png")); // set coin Image to empty plate
-            this.coinImage.setOnMouseClicked(event1 -> { // set click event to this
+            this.customerMoneyImage.setImage(createImage("coin.png")); // set coin Image to empty plate
+            this.customerMoneyImage.setOnMouseClicked(event1 -> { // set click event to this
                 try {
                     deactivateCustomer(this);
                 } catch (FileNotFoundException e) {

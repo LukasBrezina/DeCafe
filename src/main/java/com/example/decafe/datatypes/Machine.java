@@ -19,27 +19,27 @@ import static com.example.decafe.utility.ImageService.createImage;
 
 // Class used to control all the methods needed to operate a Machine
 public class Machine {
-    private int duration; // The duration that is needed to produce a product - How long does it take to produce something?
+    private int makeDurationOfProduct;
     private Boolean produced; // Boolean that says if a product was already produced of if it needs to be produced
-    private final String filenameImageMachineWithoutProduct; // Image of the Machine in the default state
-    private final String filenameImageMachineWithProduct; // Image of the Machine with a product already produced
-    private final String productType; // The type of the Machine (cake or coffee)
+    private final String imageOfMachineWithoutProduct;
+    private final String imageOfMachineWithProduct;
+    private final String machineProductType;
 
     // Constructor
     public Machine(int duration, String filenameImageMachineWithProduct, String filenameImageMachineWithoutProduct, String productType){
-        this.duration = duration;
+        this.makeDurationOfProduct = duration;
         this.produced = false;
-        this.filenameImageMachineWithProduct = filenameImageMachineWithProduct;
-        this.filenameImageMachineWithoutProduct = filenameImageMachineWithoutProduct;
-        this.productType = productType;
+        this.imageOfMachineWithProduct = filenameImageMachineWithProduct;
+        this.imageOfMachineWithoutProduct = filenameImageMachineWithoutProduct;
+        this.machineProductType = productType;
     }
     //Getter
-    public int getDuration() { return duration; }
+    public int getDuration() { return makeDurationOfProduct; }
 
     public Boolean getProduced() { return produced; }
 
     //Setter
-    public void setDuration(int duration) { this.duration = duration; }
+    public void setDuration(int duration) { this.makeDurationOfProduct = duration; }
 
     public void setProduced(Boolean produced){ this.produced = produced; }
 
@@ -115,7 +115,7 @@ public class Machine {
                         productionTimer.cancel();
                     }
                 },
-                this.duration* 1000L
+                this.makeDurationOfProduct * 1000L
         );
     }
 
@@ -124,7 +124,7 @@ public class Machine {
         // create new Timer object
         Timer productionTimer = new Timer();
         // Set default image of Waiter and Machine
-        String imageMachine = this.filenameImageMachineWithProduct;
+        String imageMachine = this.imageOfMachineWithProduct;
         String imageCofi = cofiBrew.getFilenameImageWithoutProduct();
         // Set boolean got produced to false - used to check if a product was produced when clicked on Machine
         boolean gotProduced = false;
@@ -150,10 +150,10 @@ public class Machine {
                 // Set produced boolean to false since nothing was produces
                 this.setProduced(false);
                 // Change Image to Machine without product (since product was taken)
-                imageMachine = this.filenameImageMachineWithoutProduct;
+                imageMachine = this.imageOfMachineWithoutProduct;
                 // Set the product the player obtain to whatever type the machine is
-                cofiBrew.setProductInHand(this.productType);
-                if (this.productType.equals("coffee")){ // If the type of the machine is coffee
+                cofiBrew.setProductInHand(this.machineProductType);
+                if (this.machineProductType.equals("coffee")){ // If the type of the machine is coffee
                     // Change the images of the waiter, so he holds coffee
                     imageCofi = cofiBrew.getFilenameImageWithCoffee();
                 } else { // If the type of the machine is cake

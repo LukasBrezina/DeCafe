@@ -5,23 +5,23 @@ import javafx.scene.image.ImageView;
 import java.util.Random;
 
 public class Order {
-    private String product; //The order of the customer
-    private ImageView orderLabelImage; //label that displays order
-    private int chair; //number of chair the customer is sitting
+    private String product;
+    private ImageView orderLabel;
+    private int chairNumberOfCustomer;
 
     public Order(ImageView orderLabel, int chairNumberOfCustomer) {
         this.product = getRandomProduct();
-        this.orderLabelImage = orderLabel;
-        this.chair = chair;
+        this.orderLabel = orderLabel;
+        this.chairNumberOfCustomer = chairNumberOfCustomer;
     }
     public String getProduct() {
         return product;
     }
     public ImageView getOrderLabelImage() {
-        return orderLabelImage;
+        return orderLabel;
     }
     public int getChair() {
-        return chair;
+        return chairNumberOfCustomer;
     }
 
     public String getRandomProduct() { //returns random order

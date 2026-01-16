@@ -168,7 +168,7 @@ public class HelloController implements Initializable {
             customer.startTimerSpawn(1, Customer.getControllerTimer());
             customer.startTimerSpawn(5, Customer.getControllerTimer());
             customer.startTimerSpawn(10, Customer.getControllerTimer());
-            Customer.allCustomers.add(customer);
+            Customer.allCustomersList.add(customer);
         }
         backgroundMusic.setCycleCount(AudioClip.INDEFINITE);
         backgroundMusic.play();
@@ -325,7 +325,7 @@ public class HelloController implements Initializable {
         Customer.smileyImages = new ImageView[]{smileyFirst, smileySecond, smileyThird, smileyFourth, smileyFifth, smileySixth, smileySeventh}; //make smiley ImageView[]
         Customer.orderLabels = new ImageView[]{orderlabel1, orderlabel2, orderlabel3, orderlabel4, orderlabel5, orderlabel6, orderlabel7}; //make label label[]
         Customer.coinImages = new ImageView[]{coinFirst, coinSecond, coinThird, coinFourth, coinFifth, coinSixth, coinSeventh}; //make coin ImageView[]
-        Customer.freeChairs = new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6)); //make freeChairs Array
+        Customer.freeChairsNumbersList = new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6)); //make freeChairs Array
         Customer.setControllerTimer(controllerTimer); //set the static timer t
         game = new Game(upgradeCoffeeImageView, upgradeCakeImageView, upgradePlayerImageView); // initialise Game Object with upgrade ImageViews
     }
@@ -449,7 +449,7 @@ public class HelloController implements Initializable {
     // Method used to display a customer, check if and order was right and set Images for coin ImagesViews
     public void displayPerson(MouseEvent event) throws IOException {
         ImageView customerImageView = (ImageView) event.getSource(); //get the Customer of the clicked Image
-        Customer customer = findCustomer(Customer.customersInCoffeeShop, customerImageView); //make new customer object
+        Customer customer = findCustomer(Customer.customersInCoffeeShopList, customerImageView); //make new customer object
 
         if (!customer.isAlreadyOrdered()) {
             customer.setAlreadyOrdered(!customer.isAlreadyOrdered());
@@ -559,7 +559,7 @@ public class HelloController implements Initializable {
 
     // Method used to stop all the timers activated by spawning customers
     public void stopTimers() {
-        for (Customer customer : Customer.allCustomers) { // cancel all 60 seconds timers
+        for (Customer customer : Customer.allCustomersList) { // cancel all 60 seconds timers
             if (customer.getSixtySecondsTimer() != null) {
                 customer.getSixtySecondsTimer().cancel();
             }
