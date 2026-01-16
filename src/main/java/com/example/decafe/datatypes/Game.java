@@ -85,22 +85,22 @@ public class Game {
 //        }
 //    }
 //
-//    public void doUpgrade(String type, Player player) throws FileNotFoundException {
-//        switch (type) {
-//            case "coffee" -> {
-//                coinsEarned = coffeeUpgrade.doUpgrades(coinsEarned);
-//                coffeeMachine.setDuration(2);
-//            }
-//            case "cake" -> {
-//                coinsEarned = cakeUpgrade.doUpgrades(coinsEarned);
-//                cakeMachine.setDuration(2);
-//            }
-//            case "player" -> {
-//                coinsEarned = playerUpgrade.doUpgrades(coinsEarned);
-//                player.setMovement(6);
-//            }
-//        }
-//    }
+    public void doUpgrade(String type, Player player) throws FileNotFoundException {
+        switch (type) {
+            case "coffee" -> {
+                coinBudget = coffeeMachineUpgrade.doUpgrades(coinBudget);
+                coffeeMachine.setDuration(2);
+            }
+            case "cake" -> {
+                coinBudget = cakeMachineUpgrade.doUpgrades(coinBudget);
+                cakeMachine.setDuration(2);
+            }
+            case "player" -> {
+                coinBudget = playerSpeedUpgrade.doUpgrades(coinBudget);
+                player.setMovement(6);
+            }
+        }
+    }
 
     public void addCoinsAfterCustomer(Customer customer){
         if (customer.isGreen()){

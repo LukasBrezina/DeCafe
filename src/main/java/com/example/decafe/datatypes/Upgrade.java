@@ -73,20 +73,20 @@ public class Upgrade {
         }
     }
 
-    public void doUpgrade(String type, Player player, Game game, Machine coffeeMachine, Machine cakeMachine, int coins) throws FileNotFoundException {
-        game.setCoinsEarned(doUpgrades(coins));
-        switch (type) {
-            case "coffee" -> {
-                coffeeMachine.setDuration(2);
-            }
-            case "cake" -> {
-                // coinsEarned = doUpgrades(coinsEarned);
-                cakeMachine.setDuration(2);
-            }
-            case "player" -> {
-                // coinsEarned = doUpgrades(coinsEarned);
-                player.setMovement(6);
-            }
-        }
-    }
+//    public void doUpgrade(String type, Player player, Game game, Machine coffeeMachine, Machine cakeMachine, int coins) throws FileNotFoundException {
+//        game.setCoinsEarned(doUpgrades(coins));
+//        switch (type) {
+//            case "coffee" -> {
+//                coffeeMachine.setDuration(2);
+//            }
+//            case "cake" -> {
+//                // coinsEarned = doUpgrades(coinsEarned);
+//                cakeMachine.setDuration(2);
+//            }
+//            case "player" -> {
+//                // coinsEarned = doUpgrades(coinsEarned);
+//                player.setMovement(6);
+//            }
+//        }
+//    }
 }

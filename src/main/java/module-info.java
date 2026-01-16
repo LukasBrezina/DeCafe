@@ -3,6 +3,7 @@ module com.example.decafe {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.media;
+    requires java.desktop;
 
 
     opens com.example.decafe to javafx.fxml;

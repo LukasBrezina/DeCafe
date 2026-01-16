@@ -105,6 +105,10 @@ public class Customer {
         Customer.controllerTimer = controllerTimer;
     }
 
+    public void setAlreadyOrdered(boolean alreadyOrdered) { //sets if the customer has already ordered or not
+        this.alreadyOrderedBool = alreadyOrdered;
+    }
+
     // Method used to create an Image Object
 //    public Image createImage(String filename) throws FileNotFoundException {
 //        File f = new File(""); // Get filepath of project
@@ -197,11 +201,10 @@ public class Customer {
             AudioClip doorBell = new AudioClip(new File(musicFile).toURI().toString());
             //MediaPlayer doorBell = new MediaPlayer(sound);
             doorBell.play();
-            customer.waitingTime(); //place customer in the waitingTime of  60 seconds
+            customer.customerWaitingTimeBeforeLeave(); //place customer in the waitingTime of  60 seconds
         }
     }
 
-    //Timer to spawn the customers
     public void startTimerSpawn(int duration, Timer controllerTimer){
         controllerTimer.schedule(
                 new TimerTask() {
@@ -215,7 +218,6 @@ public class Customer {
         );
     }
 
-    //Methode for the timer when customer leaves
     public void startTimerLeave (Customer customer){
         this.order.getOrderLabelImage().setVisible(false);
         this.smiley.setVisible(false);
@@ -224,7 +226,7 @@ public class Customer {
                     @Override
                     public void run() {
                         try {
-                            leave(customer.getImage(customer.customerImage, customerImages));
+                            customerLeaves(customer.getImage(customer.customerImage, customerImages));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -236,8 +238,7 @@ public class Customer {
         this.sixtySecondsTimer.cancel(); //cancel the 60 seconds when customer left
     }
 
-    //Methode for the general 60 seconds timer
-    public void waitingTime()  {
+    public void customerWaitingTimeBeforeLeave()  {
         Customer customer = this;
         TimerTask timerTask = new TimerTask() {
             int seconds = 60;
@@ -285,41 +286,16 @@ public class Customer {
 
     }
 
-    //Methode to display order
-    public void displayOrder(Order newOrder) throws FileNotFoundException {
-//        setOrder(order);
-//        if(order.equals("cake")) {
-//            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCakeTopLeft.png"));
-//            } else if(chair == 2 || chair == 3){
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCakeTopRight.png"));
-//            } else if(chair == 5) {
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCakeBottomRight.png"));
-//            }
-//        } else if(order.equals("coffee")){
-//            if (chair == 0 || chair == 1 || chair == 4 || chair == 6) {
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCoffeeTopLeft.png"));
-//            } else if(chair == 2 || chair == 3){
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCoffeeTopRight.png"));
-//            } else if(chair == 5){
-//                orderlabel.setVisible(true);
-//                orderlabel.setImage(createImage("bubbleCoffeeBottomRight.png"));
-//            }
-//        }
-//        this.alreadyOrdered = true;
+    public void displayOrderOfCustomer(Order newOrder) throws FileNotFoundException {
         setOrder(newOrder);
-        if (order != null && (order.equals("cake") || order.equals("coffee"))) {
+        String product = order.getProduct();
+        if (product != null && (product.equals("cake") || product.equals("coffee"))) {
             order.getOrderLabelImage().setVisible(true);
             int chair = order.getChair();
             String imageFile = switch (chair) {
-                case 0, 1, 4, 6 -> order.equals("cake") ? "bubbleCakeTopLeft.png" : "bubbleCoffeeTopLeft.png";
-                case 2, 3       -> order.equals("cake") ? "bubbleCakeTopRight.png" : "bubbleCoffeeTopRight.png";
-                case 5          -> order.equals("cake") ? "bubbleCakeBottomRight.png" : "bubbleCoffeeBottomRight.png";
+                case 0, 1, 4, 6 -> product.equals("cake") ? "bubbleCakeTopLeft.png" : "bubbleCoffeeTopLeft.png";
+                case 2, 3       -> product.equals("cake") ? "bubbleCakeTopRight.png" : "bubbleCoffeeTopRight.png";
+                case 5          -> product.equals("cake") ? "bubbleCakeBottomRight.png" : "bubbleCoffeeBottomRight.png";
                 default         -> "";
             };
             if (!imageFile.isEmpty()) {
@@ -331,30 +307,32 @@ public class Customer {
 
 
     //Methode to check if the order is right or wrong
-    public boolean checkOrder(Player CofiBrew, Customer customer, ImageView waiterImage) throws FileNotFoundException{
-        waiterImage.setImage(createImage(CofiBrew.getFilenameImageWithoutProduct())); //set CofiBrew without order
-        if (CofiBrew.getProductInHand().equals(customer.getOrder())) { //if CofiBrew has the right order
-            CofiBrew.setProductInHand("none"); // change product hold by player to none
-            this.leftUnhappy = false;
+    public boolean checkOrder(Player player, Customer customer, ImageView waiterImage) throws FileNotFoundException{
+        waiterImage.setImage(createImage(player.getFilenameImageWithoutProduct())); //set player without order
+        System.out.println(player.getProductInHand());
+        System.out.println(customer.getOrder().getProduct());
+        if (player.getProductInHand().equals(customer.getOrder().getProduct())) { //if player has the right order
+            player.setProductInHand("none"); // change product hold by player to none
+            this.leftUnhappyBool = false;
             startTimerLeave(this); // start timer to leave the coffee shop (true - it was the right order)
             return true;
         } else {
-            CofiBrew.setProductInHand("none"); // change product hold by player to none
+            player.setProductInHand("none"); // change product hold by player to none
             startTimerLeave(this);  // start timer to leave the coffee shop (false - it was the wrong order)
             return false;
         }
     }
 
     //when the customer leaves after 60 seconds without being served or received wrong order
-    public static void noMoneySpent(Customer customer) throws FileNotFoundException {
-        customer.coinImage.setVisible(false);
-        customer.coinImage.setDisable(true);
-        freeChairs.add(customer.order.getChair());
+    public static void deactivateCustomer(Customer customer) throws FileNotFoundException {
+        customer.customerMoneyImage.setVisible(false);
+        customer.customerMoneyImage.setDisable(true);
+        freeChairsNumbersList.add(customer.order.getChair());
         customer.startTimerSpawn(5, controllerTimer);
     }
 
     //Methode for when the customer leaves
-    public void leave (ImageView customerImage) throws FileNotFoundException {
+    public void customerLeaves(ImageView customerImage) throws FileNotFoundException {
         customerImage.setVisible(false);
         customersInCoffeeShop.removeIf(customer -> customer.customerImage.equals(customerImage)); //remove customer from customerList
         this.coinImage.setVisible(true);
@@ -368,7 +346,7 @@ public class Customer {
             this.coinImage.setImage(createImage("coin.png")); // set coin Image to empty plate
             this.coinImage.setOnMouseClicked(event1 -> { // set click event to this
                 try {
-                    noMoneySpent(this);
+                    deactivateCustomer(this);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -382,4 +360,9 @@ public class Customer {
         }
     }
 }
+
+
+
+
+
 

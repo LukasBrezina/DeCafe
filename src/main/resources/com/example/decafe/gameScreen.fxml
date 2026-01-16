@@ -90,7 +90,7 @@
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font></Label>
-      <ImageView fx:id="trashcanImageView" fitHeight="66.0" fitWidth="58.0" layoutX="310.0" layoutY="76.0" onMouseClicked="#noProduct" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="trashcanImageView" fitHeight="66.0" fitWidth="58.0" layoutX="310.0" layoutY="76.0" onMouseClicked="#trashItem" pickOnBounds="true" preserveRatio="true">
          <Image url="@trashcan.png" />
       </ImageView>
       <ImageView fx:id="smileySeventh" disable="true" fitHeight="36.0" fitWidth="30.0" layoutX="884.0" layoutY="534.0" pickOnBounds="true" preserveRatio="true" />

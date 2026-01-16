@@ -9,7 +9,7 @@ public class Order {
     private ImageView orderLabelImage; //label that displays order
     private int chair; //number of chair the customer is sitting
 
-    public Order(ImageView orderLabel, int chair) {
+    public Order(ImageView orderLabel, int chairNumberOfCustomer) {
         this.product = getRandomProduct();
         this.orderLabelImage = orderLabel;
         this.chair = chair;
