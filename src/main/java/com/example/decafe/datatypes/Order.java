@@ -6,26 +6,23 @@ import java.util.Random;
 
 public class Order {
     private String product;
-    private ImageView orderLabel;
+    private ImageView orderLabelImage;
     private int chairNumberOfCustomer;
 
-    public Order(ImageView orderLabel, int chairNumberOfCustomer) {
+    public Order(ImageView orderLabelImage, int chairNumberOfCustomer) {
         this.product = getRandomProduct();
-        this.orderLabel = orderLabel;
+        this.orderLabelImage = orderLabelImage;
         this.chairNumberOfCustomer = chairNumberOfCustomer;
     }
     public String getProduct() {
         return product;
     }
     public ImageView getOrderLabelImage() {
-        return orderLabel;
+        return orderLabelImage;
     }
-    public int getChair() {
-        return chairNumberOfCustomer;
-    }
+    public int getChair() { return chairNumberOfCustomer;}
 
-    public String getRandomProduct() { //returns random order
-
+    public String getRandomProduct() {
         Random random = new Random();
         int number = random.nextInt(2);
         String[] possibleOrders = {"cake", "coffee"};

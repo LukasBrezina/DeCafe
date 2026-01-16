@@ -4,7 +4,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="977.0" style="-fx-background-color: #b2bbb5;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.decafe.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="977.0" style="-fx-background-color: #b2bbb5;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.decafe.GameManager">
    <children>
       <ImageView fx:id="gameStartButton" fitHeight="101.0" fitWidth="190.0" layoutX="734.0" layoutY="546.0"
                  onMouseClicked="#switchToGameScreen" onMouseEntered="#changeStartImage"
